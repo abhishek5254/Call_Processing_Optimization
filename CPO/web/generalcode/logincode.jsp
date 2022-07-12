@@ -1,0 +1,37 @@
+<%@page import="mypack.DbManager"%>
+<%@page import="java.sql.ResultSet"%>
+
+<%
+   
+ String userid=request.getParameter("userid");
+ String password=request.getParameter("password");
+ String query="select usertype from login where userid='"+userid+"'and password='"+password+"'";
+
+DbManager dm= new DbManager();
+  
+  ResultSet rs=dm.selectQuery(query);
+  
+  if(rs.next()==true)
+  {
+     String usertype=rs.getString("usertype");
+     if(usertype.equals("user"))
+     {
+         session.setAttribute("userid", userid);
+         response.sendRedirect("../userzone/userhome.jsp");
+     }
+     else if(usertype.equals("admin"))
+     {
+         session.setAttribute("adminid",userid);
+         response.sendRedirect("../adminzone/adminhome.jsp");
+     }
+  }
+else
+  {
+      out.print("<script>alert('Invalid user');window.location.href='../login.jsp';</script>");
+  }
+
+    %>
+    
+    
+    
+    
